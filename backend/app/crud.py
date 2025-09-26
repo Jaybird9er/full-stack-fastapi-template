@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models import Item, ItemCreate, ToDo, ToDoCreate, ToDoUpdate, User, UserCreate, UserUpdate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -52,3 +52,35 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+
+"""
+Playground for testing CRUD logic
+"""
+
+def create_todo(*, session: Session, todo_in: ToDoCreate, owner_id: uuid.UUID) -> ToDo:
+    db_todo = ToDo.model_validate(todo_in, update={"owner_id": owner_id})
+    session.add(db_todo)
+    session.commit()
+    session.refresh(db_todo)
+    return db_todo
+
+def get_todos_by_user(*, session: Session, owner_id: uuid.UUID) -> list[ToDo]:
+    statement = select(ToDo).where(ToDo.owner_id == owner_id)
+    return list(session.exec(statement))
+
+def get_todo(*, session: Session, todo_id: uuid.UUID, owner_id: uuid.UUID) -> ToDo | None:
+    statement = select(ToDo).where(ToDo.id == todo_id, ToDo.owner_id == owner_id)
+    return session.exec(statement).first()
+
+def update_todo(*, session: Session, db_todo: ToDo, todo_in: ToDoUpdate) -> ToDo:
+    todo_data = todo_in.model_dump(exclude_unset=True)
+    db_todo.sqlmodel_update(todo_data)
+    session.add(db_todo)
+    session.commit()
+    session.refresh(db_todo)
+    return db_todo
+
+def delete_todo(*, session: Session, db_todo: ToDo) -> None:
+    session.delete(db_todo)
+    session.commit()
