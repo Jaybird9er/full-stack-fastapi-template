@@ -65,6 +65,11 @@ export type ToDoPublic = {
     owner_id: string;
 };
 
+export type ToDosPublic = {
+    data: Array<ToDoPublic>;
+    count: number;
+};
+
 export type ToDoUpdate = {
     title?: (string | null);
     description?: (string | null);
@@ -191,7 +196,12 @@ export type PrivateCreateUserData = {
 
 export type PrivateCreateUserResponse = (UserPublic);
 
-export type TodosReadTodosResponse = (Array<ToDoPublic>);
+export type TodosReadTodosData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type TodosReadTodosResponse = (ToDosPublic);
 
 export type TodosCreateTodoData = {
     requestBody: ToDoCreate;
@@ -200,23 +210,23 @@ export type TodosCreateTodoData = {
 export type TodosCreateTodoResponse = (ToDoPublic);
 
 export type TodosReadTodoData = {
-    todoId: string;
+    id: string;
 };
 
 export type TodosReadTodoResponse = (ToDoPublic);
 
 export type TodosUpdateTodoData = {
+    id: string;
     requestBody: ToDoUpdate;
-    todoId: string;
 };
 
 export type TodosUpdateTodoResponse = (ToDoPublic);
 
 export type TodosDeleteTodoData = {
-    todoId: string;
+    id: string;
 };
 
-export type TodosDeleteTodoResponse = (void);
+export type TodosDeleteTodoResponse = (Message);
 
 export type UsersReadUsersData = {
     limit?: number;

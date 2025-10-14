@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, TodosReadTodosResponse, TodosCreateTodoData, TodosCreateTodoResponse, TodosReadTodoData, TodosReadTodoResponse, TodosUpdateTodoData, TodosUpdateTodoResponse, TodosDeleteTodoData, TodosDeleteTodoResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, TodosReadTodosData, TodosReadTodosResponse, TodosCreateTodoData, TodosCreateTodoResponse, TodosReadTodoData, TodosReadTodoResponse, TodosUpdateTodoData, TodosUpdateTodoResponse, TodosDeleteTodoData, TodosDeleteTodoResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -241,19 +241,30 @@ export class PrivateService {
 export class TodosService {
     /**
      * Read Todos
-     * @returns ToDoPublic Successful Response
+     * Retrieve todos.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns ToDosPublic Successful Response
      * @throws ApiError
      */
-    public static readTodos(): CancelablePromise<TodosReadTodosResponse> {
+    public static readTodos(data: TodosReadTodosData = {}): CancelablePromise<TodosReadTodosResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/'
+            url: '/api/v1/todos/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
         });
     }
     
     /**
      * Create Todo
-     * Create new ToDo item.
+     * Create new todo.
      * @param data The data for the request.
      * @param data.requestBody
      * @returns ToDoPublic Successful Response
@@ -262,7 +273,7 @@ export class TodosService {
     public static createTodo(data: TodosCreateTodoData): CancelablePromise<TodosCreateTodoResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/',
+            url: '/api/v1/todos/',
             body: data.requestBody,
             mediaType: 'application/json',
             errors: {
@@ -273,17 +284,18 @@ export class TodosService {
     
     /**
      * Read Todo
+     * Get todo by ID.
      * @param data The data for the request.
-     * @param data.todoId
+     * @param data.id
      * @returns ToDoPublic Successful Response
      * @throws ApiError
      */
     public static readTodo(data: TodosReadTodoData): CancelablePromise<TodosReadTodoResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/{todo_id}',
+            url: '/api/v1/todos/{id}',
             path: {
-                todo_id: data.todoId
+                id: data.id
             },
             errors: {
                 422: 'Validation Error'
@@ -293,8 +305,9 @@ export class TodosService {
     
     /**
      * Update Todo
+     * Update a todo.
      * @param data The data for the request.
-     * @param data.todoId
+     * @param data.id
      * @param data.requestBody
      * @returns ToDoPublic Successful Response
      * @throws ApiError
@@ -302,9 +315,9 @@ export class TodosService {
     public static updateTodo(data: TodosUpdateTodoData): CancelablePromise<TodosUpdateTodoResponse> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/api/v1/{todo_id}',
+            url: '/api/v1/todos/{id}',
             path: {
-                todo_id: data.todoId
+                id: data.id
             },
             body: data.requestBody,
             mediaType: 'application/json',
@@ -316,17 +329,18 @@ export class TodosService {
     
     /**
      * Delete Todo
+     * Delete a todo.
      * @param data The data for the request.
-     * @param data.todoId
-     * @returns void Successful Response
+     * @param data.id
+     * @returns Message Successful Response
      * @throws ApiError
      */
     public static deleteTodo(data: TodosDeleteTodoData): CancelablePromise<TodosDeleteTodoResponse> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/api/v1/{todo_id}',
+            url: '/api/v1/todos/{id}',
             path: {
-                todo_id: data.todoId
+                id: data.id
             },
             errors: {
                 422: 'Validation Error'

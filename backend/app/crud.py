@@ -65,22 +65,22 @@ def create_todo(*, session: Session, todo_in: ToDoCreate, owner_id: uuid.UUID) -
     session.refresh(db_todo)
     return db_todo
 
-def get_todos_by_user(*, session: Session, owner_id: uuid.UUID) -> list[ToDo]:
-    statement = select(ToDo).where(ToDo.owner_id == owner_id)
-    return list(session.exec(statement))
+# def get_todos_by_user(*, session: Session, owner_id: uuid.UUID) -> list[ToDo]:
+#     statement = select(ToDo).where(ToDo.owner_id == owner_id)
+#     return list(session.exec(statement))
 
-def get_todo(*, session: Session, todo_id: uuid.UUID, owner_id: uuid.UUID) -> ToDo | None:
-    statement = select(ToDo).where(ToDo.id == todo_id, ToDo.owner_id == owner_id)
-    return session.exec(statement).first()
+# def get_todo(*, session: Session, todo_id: uuid.UUID, owner_id: uuid.UUID) -> ToDo | None:
+#     statement = select(ToDo).where(ToDo.id == todo_id, ToDo.owner_id == owner_id)
+#     return session.exec(statement).first()
 
-def update_todo(*, session: Session, db_todo: ToDo, todo_in: ToDoUpdate) -> ToDo:
-    todo_data = todo_in.model_dump(exclude_unset=True)
-    db_todo.sqlmodel_update(todo_data)
-    session.add(db_todo)
-    session.commit()
-    session.refresh(db_todo)
-    return db_todo
+# def update_todo(*, session: Session, db_todo: ToDo, todo_in: ToDoUpdate) -> ToDo:
+#     todo_data = todo_in.model_dump(exclude_unset=True)
+#     db_todo.sqlmodel_update(todo_data)
+#     session.add(db_todo)
+#     session.commit()
+#     session.refresh(db_todo)
+#     return db_todo
 
-def delete_todo(*, session: Session, db_todo: ToDo) -> None:
-    session.delete(db_todo)
-    session.commit()
+# def delete_todo(*, session: Session, db_todo: ToDo) -> None:
+#     session.delete(db_todo)
+#     session.commit()
