@@ -25,7 +25,7 @@ def read_todos(
         todos = session.exec(statement).all()
     else:
         count_statement = (
-            selecct(ToDo)
+            select(ToDo)
             .where(ToDo.owner_id == current_user.id)
         )
         count = session.exec(count_statement).one()

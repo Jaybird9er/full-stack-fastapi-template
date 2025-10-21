@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { FiTrash2 } from "react-icons/fi"
 
-import { TodosService } from "@/client"
+import { TodosService } from "../../client"
 import {
   DialogActionTrigger,
   DialogBody,
@@ -14,8 +14,8 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import useCustomToast from "@/hooks/useCustomToast"
+} from "../../components/ui/dialog"
+import useCustomToast from "../../hooks/useCustomToast"
 
 const DeleteTodo = ({ id }: { id: string }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -26,13 +26,12 @@ const DeleteTodo = ({ id }: { id: string }) => {
     formState: { isSubmitting },
   } = useForm()
 
+  const deleteTodo = async (id: string) => {
+    await TodosService.deleteTodo({ id: id })
+  }
+
   const mutation = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await fetch(`/api/v1/todos/${id}`, {
-        method: 'DELETE',
-      })
-      if (!response.ok) throw new Error('Failed to delete todo')
-    },
+    mutationFn: deleteTodo,
     onSuccess: () => {
       showSuccessToast("The todo was deleted successfully")
       setIsOpen(false)
@@ -41,7 +40,7 @@ const DeleteTodo = ({ id }: { id: string }) => {
       showErrorToast("An error occurred while deleting the todo")
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] })
+      queryClient.invalidateQueries()
     },
   })
 
